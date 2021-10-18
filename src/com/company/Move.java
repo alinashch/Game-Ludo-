@@ -1,179 +1,95 @@
 package com.company;
 
-import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
-public class Move extends GameField {
-    public static void Move(Dot dot, int i, ArrayList<Block> block){
-            for (int k = i; k > 0; k--) {
-                Direction d = dot.stack.pop();
-                if(Block.Check(dot,block,d)==true) {
-                    MoveOneStep(d, dot);
-                }else{
-                    break;
+public class Move extends Coordinates {
+    public static Status status = Status.InGAME;
+    public static final int OneStep = 50;
+
+    public static int CanMoveOnNextCell(List<Dot> Dots, Cell c, Dot d, List<Integer> List) {
+        for (int i = 0; i < Dots.size(); i++) {
+            if (c.DotOnCellFirst == null || c.DotOnCellSecond == null) {
+                if (c.CellStatus == BlockStatus.Usual) {
+                    if (c.DotOnCellFirst == null) {
+                        if (c.DotOnCellSecond == null) {
+                            return 1;
+                        } else {
+                            if (Dots.get(i).CellNumber == c.CellNumber && c.DotOnCellSecond.color == d.color) {
+                                return 1;
+                            } else if (Dots.get(i).CellNumber == c.CellNumber && c.DotOnCellSecond.color != d.color) {
+                                return 2;
+                            }
+                        }
+                    } else if (c.DotOnCellSecond == null) {
+                        if (c.DotOnCellFirst == null) {
+                            return 1;
+                        } else {
+                            if (Dots.get(i).CellNumber == c.CellNumber && c.DotOnCellFirst.color == d.color) {
+                                return 1;
+                            } else if (Dots.get(i).CellNumber == c.CellNumber && c.DotOnCellFirst.color != d.color) {
+                                return 1;
+                            }
+                        }
+                    }
+                } else if (c.CellStatus == BlockStatus.HomeExit) {
+                    if (c.DotOnCellFirst == null) {
+                        if (c.DotOnCellSecond == null) {
+                            return 1;
+                        } else {
+                            if (Dots.get(i).CellNumber == c.CellNumber && c.DotOnCellSecond.color == d.color) {
+                                return 1;
+
+                            } else if (Dots.get(i).CellNumber == c.CellNumber && c.DotOnCellSecond.color != d.color) {
+                                return 1;
+                            }
+                        }
+                    } else if (c.DotOnCellSecond == null) {
+                        if (c.DotOnCellFirst == null) {
+                            return 1;
+                        } else {
+                            if (Dots.get(i).CellNumber == c.CellNumber && c.DotOnCellFirst.color == d.color) {
+                                // System.out.println("21");
+                                return 1;
+
+                            } else if (Dots.get(i).CellNumber == c.CellNumber && c.DotOnCellFirst.color != d.color) {
+                                // System.out.println("22");
+                                return 1;
+                            }
+                        }
+                    }
+                } else if (c.CellStatus == BlockStatus.Safe) {
+                    return 1;
+                } else if (c.CellStatus == BlockStatus.Finish) {
+                    ColorDot Cd = Coordinates.FindDotToColor(d.color);
+                    Cd.DotsInGame--;
+                    Cd.DotsOnFinish++;
+                    c.DotOnCellSecond = null;
+                    c.DotOnCellFirst = null;
+                    for (int k = 0; k < Dots.size(); k++) {
+                        if (Dots.get(k).color == Cd.Color) {
+                            int x = 20;
+                            for (int l = 0; l < x; l++) {
+                                x = Cell.MoveDotForCells(d, 1, List, Dots, x);
+                            }
+                        }
+                    }
+                    if (Cd.DotsOnFinish == 4) {
+                        status = Status.EndGame;
+                        System.out.println("All dots on finish color ");
+                        Cell.GetColor(d);
+                        System.out.println();
+                    }
+                    return 1;
                 }
+            } else {
+                //System.out.println("00000");
+                return 0;
             }
-            if (dot.stack.empty()) {
-                status = Status.WIN;
-            }
+        }
+        return 1;
     }
-    public static Stack<Direction> CreateStackGreen(){
-        Stack<Direction> stack=new Stack<>();
-        stack.push(Direction.DOWN);
-        AddDirection(stack,Direction.DOWN);
-        stack.push(Direction.RIGHT);
-        AddDirection(stack,Direction.UP);
-        AddDirection(stack,Direction.RIGHT);
-        AddSmallDirection(stack,Direction.UP);
-        AddDirection(stack,Direction.LEFT);
-        AddDirection(stack,Direction.UP);
-        AddSmallDirection(stack,Direction.LEFT);
-        AddDirection(stack,Direction.DOWN);
-        AddDirection(stack,Direction.LEFT);
-        AddSmallDirection(stack,Direction.DOWN);
-        AddDirection(stack,Direction.RIGHT);
-        AddDirection(stack,Direction.DOWN);
-        return stack;
-    }
-    public static Stack<Direction> CreateStackRed(){
-        Stack<Direction> stack=new Stack<>();
-        stack.push(Direction.UP);
-        AddDirection(stack,Direction.UP);
-        stack.push(Direction.LEFT);
-        AddDirection(stack,Direction.DOWN);
-        AddDirection(stack,Direction.LEFT);
-        AddSmallDirection(stack,Direction.DOWN);
-        AddDirection(stack,Direction.RIGHT);
-        AddDirection(stack,Direction.DOWN);
-        AddSmallDirection(stack,Direction.RIGHT);
-        AddDirection(stack,Direction.UP);
-        AddDirection(stack,Direction.RIGHT);
-        AddSmallDirection(stack,Direction.UP);
-        AddDirection(stack,Direction.LEFT);
-        AddDirection(stack,Direction.UP);
-        return stack;
-    }
-    public static Stack<Direction> CreateStackBlue(){
-        Stack<Direction> stack=new Stack<>();
-        stack.push(Direction.RIGHT);
-        AddDirection(stack,Direction.RIGHT);
-        stack.push(Direction.UP);
-        AddDirection(stack,Direction.LEFT);
-        AddDirection(stack,Direction.UP);
-        AddSmallDirection(stack,Direction.LEFT);
-        AddDirection(stack,Direction.DOWN);
-        AddDirection(stack,Direction.LEFT);
-        AddSmallDirection(stack,Direction.DOWN);
-        AddDirection(stack,Direction.RIGHT);
-        AddDirection(stack,Direction.DOWN);
-        AddSmallDirection(stack,Direction.RIGHT);
-        AddDirection(stack,Direction.UP);
-        AddDirection(stack,Direction.RIGHT);
-        return stack;
-    }
-
-
-    private static void MoveOneStep(Direction d, Dot dot){
-
-        if(d==Direction.UP){
-            Move.MoveUp(dot);
-        }
-        if(d==Direction.DOWN){
-            Move.MoveDown(dot);
-        }
-        if(d==Direction.LEFT){
-            Move.MoveLeft(dot);
-        }
-        if(d==Direction.RIGHT){
-            Move.MoveRight(dot);
-        }
-    }
-
-
-    private static void MoveUp(Dot dot){
-        if(dot.color==Color.RED){
-            RedY-=60;
-            dot.Y-=60;
-        }
-        if(dot.color==Color.GREEN){
-            GreenY-=60;
-            dot.Y-=60;
-        }
-        if(dot.color==Color.BLUE){
-            BlueY-=60;
-            dot.Y-=60;
-        }
-        if(dot.color==Color.YELLOW){
-            YellowY-=60;
-            dot.Y-=60;
-        }
-    }
-    private static void MoveDown(Dot dot){
-        if(dot.color==Color.RED){
-            RedY+=60;
-            dot.Y+=60;
-        }
-        if(dot.color==Color.GREEN){
-            GreenY+=60;
-            dot.Y+=60;
-        }
-        if(dot.color==Color.BLUE){
-            BlueY+=60;
-            dot.Y+=60;
-        }
-        if(dot.color==Color.YELLOW){
-            YellowY+=60;
-            dot.Y+=60;
-        }
-    }
-    private static void MoveLeft(Dot dot){
-        if(dot.color==Color.RED){
-            RedX-=60;
-            dot.X-=60;
-        }
-        if(dot.color==Color.GREEN){
-            GreenX-=60;
-            dot.X-=60;
-        }
-        if(dot.color==Color.BLUE){
-            BlueX-=60;
-            dot.X-=60;
-        }
-        if(dot.color== Color.YELLOW){
-            YellowX-=60;
-            dot.X-=60;
-        }
-    }
-    private static void MoveRight(Dot dot){
-        if(dot.color==Color.RED){
-            RedX+=60;
-            dot.X+=60;
-        }
-        if(dot.color==Color.GREEN){
-            GreenX+=60;
-            dot.X+=60;
-        }
-        if(dot.color==Color.BLUE){
-            BlueX+=60;
-            dot.X+=60;
-        }
-        if(dot.color==Color.YELLOW){
-            YellowX+=60;
-            dot.X+=60;
-        }
-    }
-    private static Stack AddDirection(Stack stack, Direction d){
-        for(int i=5; i>0; i--) {
-            stack.push(d);
-        }
-        return stack;
-    }
-    private static Stack AddSmallDirection(Stack stack, Direction d){
-        for(int i=2; i>0; i--) {
-            stack.add(d);
-        }
-        return stack;
-    }
-
 }
+
+
