@@ -65,22 +65,20 @@ public class RulesForMove extends Move {
                 }
             }
 
-
-
     }
 
     private static void PrintColor(List<Dot> Dots){
         if(Dots.get(0).color== Color.RED){
-            System.out.print("Красный");
+            System.out.print(" Красный");
         }
         if(Dots.get(0).color==Color.BLUE){
-            System.out.print("Синий");
+            System.out.print(" Синий");
         }
         if(Dots.get(0).color==Color.GREEN){
-            System.out.print("Зеленый");
+            System.out.print(" Зеленый");
         }
         if(Dots.get(0).color==Color.YELLOW){
-            System.out.print("Желтый");
+            System.out.print(" Желтый");
         }
     }
     private static int Check(List<Dot> Dots, int wr){

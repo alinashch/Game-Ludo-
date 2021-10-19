@@ -188,7 +188,7 @@ public class Cell extends CellsMethod {
             if(x==6){
                 DeleteBlock(d,List,DotsInGame);
             }
-        for(int i=0; i<x; i++) {
+        for(int i=0; i<x-1; i++) {
            // System.out.println("111");
             x = MoveDotForCells(d, 1, List, DotsInGame, x);
             if (d.X == 350 && d.Y == 350) {
@@ -196,11 +196,12 @@ public class Cell extends CellsMethod {
                 Dots.remove(d);
                 return;
             }
-            if(i==x-1){
-                CutDownDot(d,DotsInGame,List,Dots);
-            }
             CompareDotsAndCells(DotsInGame);
+
         }
+        MoveDotForCells(d, 1, List, DotsInGame, x);
+        CutDownDot(d,DotsInGame,List,Dots);
+
         }
         System.out.println( );
     }

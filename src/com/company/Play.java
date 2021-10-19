@@ -25,6 +25,9 @@ public class Play extends RulesForMove {
         List<Integer> GreenPath = Cell.CreateGreenPath();
         List<Integer> BluePath = Cell.CreateBluePath();
 
+       // Cell.Move(GreenDots.get(0),2, GreenPath,DotsInGame,GreenDots);
+        //Cell.Move(RedDots.get(0),18, RedPath,DotsInGame,RedDots);
+
         while (status == Status.InGAME) {
             System.out.println("Для начала хода введите r ");
             String x = scanner.nextLine();

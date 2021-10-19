@@ -29,7 +29,7 @@ public class Move extends Coordinates {
                             if (Dots.get(i).CellNumber == c.CellNumber && c.DotOnCellFirst.color == d.color) {
                                 return 1;
                             } else if (Dots.get(i).CellNumber == c.CellNumber && c.DotOnCellFirst.color != d.color) {
-                                return 1;
+                                return 2;
                             }
                         }
                     }

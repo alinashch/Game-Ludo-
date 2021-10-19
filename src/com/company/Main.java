@@ -20,7 +20,7 @@ public class Main extends JFrame  {
         Main main=new Main();
         GameField.Game();
         TimeUnit.SECONDS.sleep(3);
-       System.exit(0);
+        System.exit(0);
     }
 
 }
