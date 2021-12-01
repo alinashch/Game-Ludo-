@@ -2,7 +2,7 @@ package com.company;
 
 import java.awt.*;
 
-public class Graph extends Move{
+public class Graph extends Coordinates {
     public static final int DOT_SIZE = 25;
 
     public static void Draw(Graphics g){
@@ -40,7 +40,6 @@ public class Graph extends Move{
         x=0;
         y=300;
         DrawLong(2,x,y,g);
-
         g.setColor(Color.RED);
         for(int i=1; i<Red.DotsCoordinates.length; i++) {
             g.fillOval(Red.DotsCoordinates[i-1], Red.DotsCoordinates[i], DOT_SIZE, DOT_SIZE);
@@ -63,7 +62,7 @@ public class Graph extends Move{
         }
     }
 
-    private static void DrawLong(int h,int x, int y,Graphics g){
+    private static void DrawLong(int h, int x, int y, Graphics g){
         for(int i=15; i>0; i--){
             if(i!=8) {
                 for(int j=3; j>0;j--) {
@@ -92,7 +91,7 @@ public class Graph extends Move{
 
         }
     }
-    private static void DrawShort(int h, int x, int y,Graphics g){
+    private static void DrawShort(int h, int x, int y, Graphics g){
         for(int i=6;i>0; i--){
             g.fillRect(x, y, 50, 50);
             if(h==1) {

@@ -6,23 +6,23 @@ import java.util.Stack;
 
 public class ColorDot extends Coordinates{
     int DotsInGame;
-    int DotsOnFinish;
     int SerialNumber;
     int [] DotsCoordinates;
     java.awt.Color Color;
     Base DotBase;
     Stack<Integer>  DotsOnBase;
 
-    public ColorDot(int DotsInGame, int DotsOnFinish, int SerialNumber,int [] DotsCoordinates,Color Color, Base DotBase, Stack<Integer>  DotsOnBase){
+    public ColorDot(int DotsInGame,  int SerialNumber,int [] DotsCoordinates,Color Color, Base DotBase, Stack<Integer>  DotsOnBase){
         this.DotsCoordinates=DotsCoordinates;
         this.SerialNumber=SerialNumber;
         this.DotsInGame=DotsInGame;
-        this.DotsOnFinish=DotsOnFinish;
         this.Color=Color;
         this.DotBase=DotBase;
         this. DotsOnBase=DotsOnBase;
     }
-    public static void CreateDotsCoordinates(){
+    public  void CreateDotsCoordinates(){
+
+
         Red.DotsCoordinates=new int[]{ 300,200,250,200,200,200,150,200};
         Blue.DotsCoordinates= new int[]{ 525,300,525,250,525,200,525,150};
         Green.DotsCoordinates=new int[]{ 200,425,200,475,200,525,200,575};

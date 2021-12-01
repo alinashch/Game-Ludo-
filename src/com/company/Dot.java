@@ -25,7 +25,6 @@ public class Dot{
         private int Y;
         private   int SerialNumber;
         private int CellNumber;
-        private Status status;
         public DotBuilder withColor(Color color){
             this.color=color;
             return this;
