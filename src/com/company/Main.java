@@ -15,7 +15,6 @@ public class Main extends JFrame  {
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         repaint();
-
     }
 
     public static void main(String[] args) throws   Exception {

@@ -42,8 +42,18 @@ public class GameField  extends JPanel   implements ActionListener {
     }
     public  void Game()
     {
+        Scanner scanner = new Scanner(System.in);
         Play play=new Play();
-        play.Play();
+        System.out.println("1-ходит игрок, 2-ходит компьютер. Порядок : Красный, Синий, Желтый, Зеленый ");
+        int a=scanner.nextInt();
+        int b=scanner.nextInt();
+        int c=scanner.nextInt();
+        int d=scanner.nextInt();
+        Player p1=new Player(new RulesForMove(),a);
+        Player p2=new Player(new RulesForMove(),b);
+        Player p3=new Player(new RulesForMove(),c);
+        Player p4=new Player(new RulesForMove(),d);
+        play.Play(p1, p2,p3,p4);
         repaint();
     }
     @Override

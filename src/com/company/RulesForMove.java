@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Scanner;
 
-public class RulesForMove extends Coordinates {
+public class RulesForMove extends Coordinates implements Strategy{
 
     protected void MoveAllDots(int a, int b, int c, int d, List<Dot> YellowDots, List<Dot> BlueDots, List<Dot> RedDots, List<Dot> GreenDots, List<Dot> DotsInGame, List<Cell> Cells) {
 
@@ -46,8 +46,19 @@ public class RulesForMove extends Coordinates {
             return;
         }
     }
+    @Override
+    public void MoveColorDotComputer(List<Dot> RedDots,  List<Dot> DotsInGame, List<Cell> Cells) {
+        MoveOneColorDotComputer(RedDots,DotsInGame,Cells);
+    }
 
-    private  void MoveOneColorDotPlayer(List<Dot> RedDots,  List<Dot> DotsInGame, List<Cell> Cells) {
+    @Override
+    public void endGame() {
+        if(status != Status.InGAME){
+            return;
+        }
+    }
+
+    public void MoveOneColorDotPlayer(List<Dot> RedDots,  List<Dot> DotsInGame, List<Cell> Cells) {
         int k = Random();
         Cell cellsMethod=new Cell(null,0,null,null,0,0,null, null);
         RulesForMove rulesForMove=new RulesForMove();
@@ -81,13 +92,10 @@ public class RulesForMove extends Coordinates {
             }
 
     }
-    private  void MoveOneColorDotComputer(List<Dot> Dots,  List<Dot> DotsInGame, List<Cell> Cells){
-       int  k = Random();
+    public  void MoveOneColorDotComputer(List<Dot> Dots,  List<Dot> DotsInGame, List<Cell> Cells){
+        int  k = Random();
         Cell cellsMethod=new Cell(null,0,null,null,0,0,null, null);
-
-        Base base=new Base(0,0,0,0,0,0);
-        Cell cell=new Cell(null,0,null,null,0,0,null,null);
-            int wy = 10;
+         int wy = 10;
             Coordinates coordinates=new Coordinates();
             ColorDot CD=coordinates.FindDotToColor(Dots.get(0).color);
             while (wy > CD.DotsInGame) {
@@ -130,7 +138,7 @@ public class RulesForMove extends Coordinates {
             System.out.print(" Желтый");
         }
     }
-    private  int Check(List<Dot> Dots, int wr){
+    public int Check(List<Dot> Dots, int wr){
         Coordinates coordinates=new Coordinates();
 
         ColorDot CD = coordinates.FindDotToColor(Dots.get(0).color);
@@ -143,7 +151,7 @@ public class RulesForMove extends Coordinates {
         return 0;
     }
 
-    private  void MoveOnFive(List<Dot> Dots,  List<Dot> DotsInGame, int q, int wr, List<Cell> Cells){
+    public void MoveOnFive(List<Dot> Dots, List<Dot> DotsInGame, int q, int wr, List<Cell> Cells){
         Coordinates coordinates=new Coordinates();
         ColorDot CD = coordinates.FindDotToColor(Dots.get(0).color);
         Cell cellsMethod=new Cell(null,0,null,null,0,0,null, null);
@@ -181,7 +189,7 @@ public class RulesForMove extends Coordinates {
         }
     }
 
-    private  void MoveOnSix(List<Dot> Dots,  List<Dot> DotsInGame, int q, int wr, List<Cell> Cells){
+    public void MoveOnSix(List<Dot> Dots, List<Dot> DotsInGame, int q, int wr, List<Cell> Cells){
         Coordinates coordinates=new Coordinates();
         ColorDot CD = coordinates.FindDotToColor(Dots.get(0).color);
         Cell cellsMethod=new Cell(null,0,null,null,0,0,null, null);
@@ -215,7 +223,7 @@ public class RulesForMove extends Coordinates {
         }
     }
 
-    private  int Random() {
+    public int Random() {
         int K = (int) (Math.random() * ((6 - 1) + 1) + 1);
         System.out.println(K);
         return K;
@@ -230,5 +238,6 @@ public class RulesForMove extends Coordinates {
         }
         return wr;
     }
+
 
 }
