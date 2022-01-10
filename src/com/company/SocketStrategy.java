@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.List;
-import java.util.Scanner;
 
 public class SocketStrategy implements Strategy{
     private final Socket socket;
@@ -23,14 +22,12 @@ public class SocketStrategy implements Strategy{
             throw new IllegalStateException("Cannot connect to client", ex);
         }
     }
-    @Override
-    public void MoveColorDotComputer(List<Dot> RedDots, List<Dot> DotsInGame, List<Cell> Cells) {
+    public void MoveColorDotComputer(List<Dot> RedDots, List<Dot> DotsInGame, List<Cell> Cells, int k) {
         String answer = "";
         try {
             String command = Command.BET.getCommandString()+Command.SEPARATOR;
-            System.out.println("To client: "+command);
             out.println(command);
-            out.flush();
+
             while ((answer = in.readLine()) == null) {
             }
             System.out.println("From client: "+answer);
@@ -38,7 +35,9 @@ public class SocketStrategy implements Strategy{
             if (Command.RESP.getCommandString().equals(answerParsed[0])) {
                 System.out.println("Dot's number : " + answerParsed[1]);
                 int wr= Integer.parseInt(answerParsed[1]);
-                MoveOneColorDotPlayer(RedDots,DotsInGame,Cells,wr, socket);
+                    Cell cellsMethod=new Cell(null,0,null,null,0,0,null, null);
+                    System.out.println("Передвинули на "+k+"цвет красный");
+                    cellsMethod.Move2(RedDots.get(wr - 1),  Cells,k,DotsInGame, RedDots);
             } else {
                 throw new IllegalArgumentException("Client response is not recognized: "+answer);
             }
@@ -46,56 +45,76 @@ public class SocketStrategy implements Strategy{
             throw new IllegalStateException("Cannot communicate with a client", ex);
         }
     }
-    public void MoveOneColorDotPlayer(List<Dot> RedDots,  List<Dot> DotsInGame, List<Cell> Cells, int wr, Socket socket) {
-        RulesForMove rulesForMove=new RulesForMove();
-        int k = rulesForMove.Random();
-        Cell cellsMethod=new Cell(null,0,null,null,0,0,null, null);
-
-        System.out.print("Двигаем фишку  номер" + wr+ " Цвет Красный");
-        if (k == 5) {
-            System.out.println("1-Передвинуть фишку на 5 , 2-Создать новую фишку");
-            String answer = "";
-            while (true) {
-                try {
-                    if (!((answer = in.readLine()) == null)) break;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+    @Override
+    public int  Enter(){
+        String answer = "";
+        int wr;
+        try {
+            String command = Command.ENTER.getCommandString()+Command.SEPARATOR;
+            System.out.println("To client: "+command);
+            out.println(command);
+            while ((answer = in.readLine()) == null) {
             }
             System.out.println("From client: "+answer);
-            int q=1;
             String[] answerParsed = answer.split(Command.SEPARATOR);
-            if (Command.RESP.getCommandString().equals(answerParsed[0])) {
-                q= Integer.parseInt(answerParsed[1]);
+            if (Command.ENTERRESP.getCommandString().equals(answerParsed[0])) {
+                 wr= Integer.parseInt(answerParsed[1]);
+                System.out.println("Player enter: " + answerParsed[1]);
+            } else {
+                throw new IllegalArgumentException("Client response is not recognized: "+answer);
             }
-            rulesForMove.MoveOnFive(RedDots,  DotsInGame, q, wr,Cells);
-        } else {
-            if (rulesForMove.Check(RedDots, wr) != 2) {
-                cellsMethod.Move2(RedDots.get(wr - 1),  Cells,k,DotsInGame, RedDots);
-                System.out.print("Передвинли на " + k + " Цвет Красный");
-                System.out.println();
-            }
-            if (k == 6) {
-                System.out.println("1-Передвинуть фишку на 7 , 2-Создать новую фишку");
-                String answer = "";
-                while (true) {
-                    try {
-                        if (!((answer = in.readLine()) == null)) break;
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                System.out.println("From client: "+answer);
-                int q=1;
-                String[] answerParsed = answer.split(Command.SEPARATOR);
-                if (Command.RESP.getCommandString().equals(answerParsed[0])) {
-                    q= Integer.parseInt(answerParsed[1]);
-                }
-                rulesForMove.MoveOnSix(RedDots,  DotsInGame, q, wr,Cells);
-            }
+        } catch (IOException ex) {
+            throw new IllegalStateException("Cannot communicate with a client", ex);
         }
-
+        return wr;
     }
+    @Override
+    public void ChooseFive(List<Dot> RedDots, List<Dot> DotsInGame, List<Cell> Cells, int wr){
+        RulesForMove rulesForMove=new RulesForMove();
+        String answer = "";
+        try {
+            String command = Command.CHOOSE.getCommandString()+Command.SEPARATOR;
+            System.out.println("To client: "+command);
+            out.println(command);
+            while ((answer = in.readLine()) == null) {
+            }
+            System.out.println("From client: "+answer);
+            String[] answerParsed = answer.split(Command.SEPARATOR);
+            if (Command.CHOOSERESP.getCommandString().equals(answerParsed[0])) {
+                System.out.println("Выбрано  "+answerParsed[1]);
+                int k= Integer.parseInt(answerParsed[1]);
+                rulesForMove.MoveOnFive(RedDots,DotsInGame,k, wr,Cells);
+            } else {
+                throw new IllegalArgumentException("Client response is not recognized: "+answer);
+            }
+        } catch (IOException ex) {
+            throw new IllegalStateException("Cannot communicate with a client", ex);
+        }
+    }
+    @Override
+    public void ChooseSix(List<Dot> RedDots, List<Dot> DotsInGame, List<Cell> Cells, int wr){
+        RulesForMove rulesForMove=new RulesForMove();
+        String answer = "";
+        try {
+            String command = Command.CHOOSE.getCommandString()+Command.SEPARATOR;
+            System.out.println("To client: "+command);
+            out.println(command);
+            while ((answer = in.readLine()) == null) {
+            }
+            System.out.println("From client: "+answer);
+            String[] answerParsed = answer.split(Command.SEPARATOR);
+            if (Command.CHOOSERESP.getCommandString().equals(answerParsed[0])) {
+                System.out.println("Выбрано  "+answerParsed[1]);
+                int k= Integer.parseInt(answerParsed[1]);
+                rulesForMove.MoveOnSix(RedDots,DotsInGame,k, wr,Cells);
+            } else {
+                throw new IllegalArgumentException("Client response is not recognized: "+answer);
+            }
+        } catch (IOException ex) {
+            throw new IllegalStateException("Cannot communicate with a client", ex);
+        }
+    }
+
         @Override
     public void endGame() {
         try {
@@ -109,5 +128,28 @@ public class SocketStrategy implements Strategy{
                 System.out.println("Cannot close socket: "+e.getMessage());
             }
         }
+    }
+
+    public int EnterNumber(){
+        String answer = "";
+        int wr;
+        try {
+            String command = Command.ENTER.getCommandString()+Command.SEPARATOR;
+            System.out.println("To client: "+command);
+            out.println(command);
+            while ((answer = in.readLine()) == null) {
+            }
+            System.out.println("From client: "+answer);
+            String[] answerParsed = answer.split(Command.SEPARATOR);
+            if (Command.ENTERRESP.getCommandString().equals(answerParsed[0])) {
+                wr= Integer.parseInt(answerParsed[1]);
+                System.out.println("Player enter: " + answerParsed[1]);
+            } else {
+                throw new IllegalArgumentException("Client response is not recognized: "+answer);
+            }
+        } catch (IOException ex) {
+            throw new IllegalStateException("Cannot communicate with a client", ex);
+        }
+        return wr;
     }
 }

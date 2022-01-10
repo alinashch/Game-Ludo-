@@ -5,50 +5,37 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 import java.util.Scanner;
+import com.company.SocketStrategy;
 
 public class RulesForMove extends Coordinates implements Strategy{
-
-    protected void MoveAllDots(int a, int b, int c, int d, List<Dot> YellowDots, List<Dot> BlueDots, List<Dot> RedDots, List<Dot> GreenDots, List<Dot> DotsInGame, List<Cell> Cells) {
-
-        if (a == 1) {
-            MoveOneColorDotPlayer(RedDots, DotsInGame, Cells);
-        } else if (a == 2) {
-            MoveOneColorDotComputer(RedDots, DotsInGame, Cells);
-        } else {
-            System.out.println("Неправильно введено число");
-            return;
-        }
-
+    public void First(int b,List<Dot> BlueDots,List<Dot> DotsInGame, List<Cell> Cell ){
         if (b == 1) {
-            MoveOneColorDotPlayer(BlueDots, DotsInGame, Cells);
+            int k=(int) (Math.random() * ((6 - 1) + 1) + 1);
+            System.out.println("Выпало " + k);
+            int wr=Enter();
+
+            if(k==5){
+                ChooseFive(BlueDots, DotsInGame, Cell,wr);
+            }
+            if(k==6){
+                ChooseSix(BlueDots, DotsInGame, Cell,wr);
+            }else {
+                MoveColorDotComputer(BlueDots, DotsInGame, Cell, k,wr);
+            }
         } else if (b == 2) {
-            MoveOneColorDotComputer(BlueDots, DotsInGame, Cells);
-        } else {
-            System.out.println("Неправильно введено число");
-            return;
-        }
-
-        if (c == 1) {
-            MoveOneColorDotPlayer(YellowDots, DotsInGame, Cells);
-        } else if (c == 2) {
-            MoveOneColorDotComputer(YellowDots, DotsInGame, Cells);
-        } else {
-            System.out.println("Неправильно введено число");
-            return;
-        }
-
-        if (d == 1) {
-            MoveOneColorDotPlayer(GreenDots, DotsInGame, Cells);
-        } else if (d == 2) {
-            MoveOneColorDotComputer(GreenDots, DotsInGame, Cells);
+           MoveOneColorDotComputer(BlueDots, DotsInGame, Cell);
         } else {
             System.out.println("Неправильно введено число");
             return;
         }
     }
-    @Override
-    public void MoveColorDotComputer(List<Dot> RedDots,  List<Dot> DotsInGame, List<Cell> Cells) {
-        MoveOneColorDotComputer(RedDots,DotsInGame,Cells);
+
+    public void MoveColorDotComputer(List<Dot> RedDots, List<Dot> DotsInGame, List<Cell> Cells, int k, int wr) {
+        Cell cellsMethod=new Cell(null,0,null,null,0,0,null, null);
+        cellsMethod.Move2(RedDots.get(wr - 1),  Cells,k,DotsInGame, RedDots);
+        System.out.println("Передвинули на "+k+"цвет ");
+        PrintColor(RedDots);
+
     }
 
     @Override
@@ -57,17 +44,37 @@ public class RulesForMove extends Coordinates implements Strategy{
             return;
         }
     }
+    @Override
+     public  int  Enter(){
+         Scanner scanner = new Scanner(System.in);
+         System.out.println("Номер фишки для передвижения");
+         int wr = scanner.nextInt();
+         return wr;
+     }
+     @Override
+    public void ChooseFive(List<Dot> RedDots, List<Dot> DotsInGame, List<Cell> Cells, int wr){
+        Scanner scanner=new Scanner(System.in);
+        System.out.println("1-Передвинуть фишку на 5 , 2-Создать новую фишку");
+        int q = scanner.nextInt();
+        MoveOnFive(RedDots,  DotsInGame, q, wr,Cells);
+    }
+    @Override
+    public void ChooseSix(List<Dot> RedDots, List<Dot> DotsInGame, List<Cell> Cells, int wr){
+        Scanner scanner=new Scanner(System.in);
+        System.out.println("1-Передвинуть фишку на 7 , 2-Создать новую фишку");
+        int q = scanner.nextInt();
+        MoveOnSix(RedDots,  DotsInGame, q, wr,Cells);
+    }
 
-    public void MoveOneColorDotPlayer(List<Dot> RedDots,  List<Dot> DotsInGame, List<Cell> Cells) {
+     public void MoveOn(List<Dot> RedDots,  List<Dot> DotsInGame, List<Cell> Cells){
+       int wr= Enter();
+       MoveOneColorDotPlayer(RedDots,DotsInGame,Cells,wr);
+     }
+
+    public void MoveOneColorDotPlayer(List<Dot> RedDots,  List<Dot> DotsInGame, List<Cell> Cells, int wr) {
         int k = Random();
         Cell cellsMethod=new Cell(null,0,null,null,0,0,null, null);
         RulesForMove rulesForMove=new RulesForMove();
-
-        int wr = rulesForMove.EnterDotNumber();
-            while (Check(RedDots, wr) == 0) {
-                System.out.println("Данная фишка достигла финиша. Введите другой номер");
-                wr = rulesForMove.EnterDotNumber();
-            }
             System.out.print("Двигаем фишку  номер" + wr+ " Цвет ");
             PrintColor(RedDots);
             System.out.println();
@@ -229,15 +236,6 @@ public class RulesForMove extends Coordinates implements Strategy{
         return K;
     }
 
-    private  int EnterDotNumber() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Номер фишки для передвижения");
-        int wr = 10;
-        while (wr > Red.DotsInGame) {
-            wr = scanner.nextInt();
-        }
-        return wr;
-    }
 
 
 }

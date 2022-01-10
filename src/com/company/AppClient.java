@@ -34,12 +34,26 @@ public class AppClient {
             if (Command.END.getCommandString().equals(parsed[0])) {
                 socket.close();
             }
+            if (Command.ENTER.getCommandString().equals(parsed[0])) {
+                System.out.print("Enter your dot's number :....");
+                int nextInt = new Scanner(System.in).nextInt();
+                String resp = Command.ENTERRESP.getCommandString()+ Command.SEPARATOR + nextInt;
+                System.out.println("To server:"+resp);
+                out.println(resp);
+            }
             if (Command.BET.getCommandString().equals(parsed[0])) {
-                System.out.print("Enter your dot's number : ");
+                System.out.print("Enter your dot's number :....");
                 int nextInt = new Scanner(System.in).nextInt();
                 String resp = Command.RESP.getCommandString()+ Command.SEPARATOR + nextInt;
                 System.out.println("To server:"+resp);
                 out.println(resp);
+            }
+            if (Command.CHOOSE.getCommandString().equals(parsed[0])) {
+                    System.out.print("1-Move, 2-Create ");
+                    int nextInt = new Scanner(System.in).nextInt();
+                    String resp = Command.CHOOSERESP.getCommandString() + Command.SEPARATOR + nextInt;
+                    System.out.println("To server:" + resp);
+                    out.println(resp);
             }
         }
     }

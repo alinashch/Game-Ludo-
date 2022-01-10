@@ -49,11 +49,14 @@ public class GameField  extends JPanel   implements ActionListener {
         int b=scanner.nextInt();
         int c=scanner.nextInt();
         int d=scanner.nextInt();
-        Player p1=new Player(new RulesForMove(),a);
-        Player p2=new Player(new RulesForMove(),b);
-        Player p3=new Player(new RulesForMove(),c);
-        Player p4=new Player(new RulesForMove(),d);
-        play.Play(p1, p2,p3,p4);
+        Player p1=new Player(new RulesForMove(),a,0);
+        Player p2=new Player(new RulesForMove(),b,0);
+        Player p3=new Player(new RulesForMove(),c,0);
+        Player p4=new Player(new RulesForMove(),d,0);
+        play.PlayApp(p1, p2,p3,p4);
+        while (play.GameOver()) {
+            play.MakeStep();
+        }
         repaint();
     }
     @Override
