@@ -1,11 +1,7 @@
 package com.company;
 
 public enum Command {
-
-    ENTER("ENTER"),
-    ENTERRESP("ENTERRESP"),
-    CHOOSE("CHOOSE"),
-    CHOOSERESP("CHOSERESP"),
+    GAME("GAME"),
     BET("BET"),
     RESP("RESP"),
     END("END");

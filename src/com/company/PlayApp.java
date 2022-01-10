@@ -1,27 +1,31 @@
 package com.company;
 
+import java.awt.*;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import java.util.List;
 
-
-public class Play extends RulesForMove  {
+public class PlayApp extends RulesForMove  {
     public static boolean s=true;
     public static  void EnterS(){
         s=true;
     }
-    public  void Play(Player ap, Player bp, Player cp, Player dp) {
-        ColorDot ColorDot=new ColorDot(0,0,null,Color.YELLOW,null,null);
+    public  void Play(Player ap, Player bp, Player cp, Player dp, Socket socket) {
+        ColorDot ColorDot=new ColorDot(0,0,null, Color.YELLOW,null,null);
         ColorDot.CreateDotsCoordinates();
         Base base=new Base(0,0,0,0,0,0);
 
-        List<Dot> RedDots = base.CreateListDot(Color.RED);
-        List<Dot> BlueDots = base.CreateListDot(Color.BLUE);
-        List<Dot> GreenDots = base.CreateListDot(Color.GREEN);
-        List<Dot> YellowDots = base.CreateListDot(Color.YELLOW);
-        List<Dot> DotsInGame = new ArrayList<>();
+        java.util.List<Dot> RedDots = base.CreateListDot(Color.RED);
+        java.util.List<Dot> BlueDots = base.CreateListDot(Color.BLUE);
+        java.util.List<Dot> GreenDots = base.CreateListDot(Color.GREEN);
+        java.util.List<Dot> YellowDots = base.CreateListDot(Color.YELLOW);
+        java.util.List<Dot> DotsInGame = new ArrayList<>();
 
 
         DotsInGame.add(RedDots.get(0));
@@ -30,15 +34,15 @@ public class Play extends RulesForMove  {
         DotsInGame.add(YellowDots.get(0));
 
 
-        List<Cell> Cell1 = base.BasePath(Red.DotBase, Red.DotBase.FirstCell);
+        java.util.List<Cell> Cell1 = base.BasePath(Red.DotBase, Red.DotBase.FirstCell);
         base.EnterDirections(Cell1, Directions.Up, Directions.Left, Red.DotBase.BaseX, Red.DotBase.BaseY);
-        List<Cell> Cell = new ArrayList<>(Cell1);
+        java.util.List<Cell> Cell = new ArrayList<>(Cell1);
 
-        List<Cell> Cell2=base.BasePath(Green.DotBase, Green.DotBase.FirstCell);
+        java.util.List<Cell> Cell2=base.BasePath(Green.DotBase, Green.DotBase.FirstCell);
         base.EnterDirections(Cell2, Directions.Left, Directions.Down, Green.DotBase.BaseX, Green.DotBase.BaseY);
         Cell.addAll(Cell2);
 
-        List<Cell> Cell3=base.BasePath(Yellow.DotBase, Yellow.DotBase.FirstCell);
+        java.util.List<Cell> Cell3=base.BasePath(Yellow.DotBase, Yellow.DotBase.FirstCell);
         base.EnterDirections(Cell3, Directions.Down, Directions.Right, Yellow.DotBase.BaseX, Yellow.DotBase.BaseY);
         Cell.addAll(Cell3);
 
@@ -58,9 +62,10 @@ public class Play extends RulesForMove  {
         int b=bp.number;
         int c=cp.number;
         int d=dp.number;
+        SocketStrategy sc=new SocketStrategy(socket);
         while (status == Status.InGAME ) {
             if (a == 1) {
-                MoveColorDotComputer(RedDots, DotsInGame, Cell);
+                sc.MoveColorDotComputer(RedDots, DotsInGame, Cell);
             } else if (a == 2) {
                 MoveOneColorDotComputer(RedDots, DotsInGame, Cell);
             } else {
@@ -103,5 +108,4 @@ public class Play extends RulesForMove  {
         return true;
     }
 }
-
 
